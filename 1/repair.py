@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from typing import List
 
-def part_one(data: List[int]):
+def part_one(data: List[int]) -> int:
     """Find product of two numbers in the list that equal 2020
 
     Args:
@@ -14,8 +14,9 @@ def part_one(data: List[int]):
         for d2 in data:
             if d1 != d2 and d1 + d2 == 2020:
                 return d1 * d2
+    raise ValueError("Apparently a bad list")
 
-def part_two(data: List[int]):
+def part_two(data: List[int]) -> int:
     """Find product of three numbers in the list that equal 2020
 
     Args:
@@ -29,6 +30,7 @@ def part_two(data: List[int]):
             for d3 in data:
                 if d1 != d2 and d2 != d3 and d1 + d2 + d3 == 2020:
                     return d1 * d2 * d3
+    raise ValueError("Apparently unsolvable with this list")
 
 
 
@@ -47,7 +49,7 @@ def read_data(file_name: str) -> List[int]:
             data.append(int(row))
     return data
 
-def main():
+def main() -> None:
     data = read_data("input.txt")
     print("Part 1:", part_one(data))
     print("Part 2:", part_two(data))
