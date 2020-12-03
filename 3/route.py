@@ -2,12 +2,12 @@
 """Advent of code day 3 code."""
 
 from dataclasses import dataclass, field, InitVar
-from typing import Tuple, Optional
+from typing import List, Tuple, Optional
 
 import numpy as np
 
 
-def parse_row(row: str) -> bool:
+def parse_row(row: str) -> List[bool]:
     out_r = []
     for c in row:
         if c == "#":
@@ -15,6 +15,7 @@ def parse_row(row: str) -> bool:
         elif c == ".":
             out_r.append(False)
     return out_r
+
 
 @dataclass
 class Slope:
@@ -29,7 +30,7 @@ class Slope:
                 temp_l.append(parse_row(row))
         self.slope_data = np.array(temp_l)
 
-    def slide(self, right: int, down: int, start_x: int=0, start_y: int=0) -> int:
+    def slide(self, right: int, down: int, start_x: int = 0, start_y: int = 0) -> int:
         """Recursive method for sliding down the slope.
 
         Args:
@@ -44,16 +45,28 @@ class Slope:
         target_down = start_y + down
         if target_down >= self.slope_data.shape[0]:
             return 0
-        tree_found = self.slope_data[target_down][target_right % self.slope_data.shape[1]]
-        print(f"slide called with: right: {right} down: {down}, start_x: {start_x}, start_y: {start_y}, hit {tree_found}")
-        return self.slide(right, down, target_right, target_down) + self.slope_data[target_down][target_right % self.slope_data.shape[1]]
+        tree_found = self.slope_data[target_down][
+            target_right % self.slope_data.shape[1]
+        ]
+        return (
+            self.slide(right, down, target_right, target_down)
+            + self.slope_data[target_down][target_right % self.slope_data.shape[1]]
+        )
 
 
 def main() -> None:
     """Main function"""
     slope = Slope("input.txt")
     print("Part 1:", slope.slide(3, 1))
-    print("Part 2:", slope.slide(1,1) * slope.slide(3,1) * slope.slide(5,1) * slope.slide(7,1) * slope.slide(1,2))
+    print(
+        "Part 2:",
+        slope.slide(1, 1)
+        * slope.slide(3, 1)
+        * slope.slide(5, 1)
+        * slope.slide(7, 1)
+        * slope.slide(1, 2),
+    )
+
 
 if __name__ == "__main__":
     main()
