@@ -34,22 +34,30 @@ def parse_bags(text: str) -> Bags:
     return bags
 
 
-def bag_walker(data: dict, start_key: str) -> dict:
+def bag_walker_one(data: dict, start_key: str) -> int:
     count = 0
     if data[start_key] is not None:
         for v in data[start_key]:
             if v == "shiny gold":
                 count += 1
             elif v is not None:
-                count += bag_walker(data, v)
+                count += bag_walker_one(data, v)
     return count
+
+def part_two(data: dict, key: str) -> int:
+    print(key)
+    count = 1
+    if data[key] is not None:
+        for k, v in data[key].items():
+            count += v * part_two(data, k)
+    return count
+
 
 def part_one(bags: Bags) -> int:
     count = 0
     for k in bags:
-        count += 1 if bag_walker(bags, k) > 0 else 0
+        count += 1 if bag_walker_one(bags, k) > 0 else 0
     return count
-                
 
 
 def main() -> None:
@@ -59,6 +67,7 @@ def main() -> None:
         text = in_f.read()[:-1]
     bags = parse_bags(text)
     print(part_one(bags))
+    print(part_two(bags, "shiny gold") -1)
 
 
 
